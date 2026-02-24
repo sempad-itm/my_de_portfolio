@@ -24,3 +24,11 @@ python src/processor.py
 
 # 5. Запусти тесты
 pytest -v
+
+## 🐳 Запуск в Docker
+```bash
+# Сборка образа
+docker build -t sales-processor .
+
+# Запуск
+docker run --rm sales-processor
