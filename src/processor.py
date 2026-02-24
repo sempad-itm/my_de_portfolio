@@ -2,6 +2,7 @@ import csv
 import json
 from decimal import Decimal, InvalidOperation
 from datetime import datetime
+from pathlib import Path
 
 def read_csv(file) -> list[dict]:
     data = []
@@ -49,8 +50,8 @@ def save_json(data: dict, filepath: str):
         json.dump(data, f, indent=2, ensure_ascii=False)
 
 if __name__ == "__main__":
-
-    data = read_csv('data.csv')
+    BASE_DIR = Path(__file__).parent.parent
+    data = read_csv(BASE_DIR / 'data' / 'data.csv')
     stats = calculate_metrics(data)
-    save_json(stats, 'report.json')
+    save_json(stats, BASE_DIR / 'data' / 'report.json')
     print(f'Отчет готов и сохранен: {stats}')
