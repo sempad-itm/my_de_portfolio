@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  # Твой ETL-скрипт
+  app:
+    build: .
+    container_name: sales-processor
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=etl_db
+      - DB_USER=etl_user
+      - DB_PASSWORD=etl_password
+    depends_on:
+      - db
+    networks:
+      - etl-network
+
+  # PostgreSQL
+  db:
+    image: postgres:15-alpine
+    container_name: postgres-etl
+    environment:
+      - POSTGRES_DB=etl_db
+      - POSTGRES_USER=etl_user
+      - POSTGRES_PASSWORD=etl_password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql  # Инициализация БД
+    networks:
+      - etl-network
+
+networks:
+  etl-network:
+    driver: bridge
+
+volumes:
+  pgdata:
